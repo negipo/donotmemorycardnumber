@@ -1,7 +1,26 @@
+.page-header
+  %h1 FRIENDS
+
+.friends_management
+  .btn-group.management{ role: 'group' }
+    = form_tag assign_numbers_friends_path do
+      = submit_tag 'ASSIGN RANDOM NUMBERS', class: 'btn btn-danger', data: { confirm: 'Do you really need reassign?' }
+
+  .btn-group.filter{ role: 'group' }
+    %a.btn.btn-default{ type: 'button', href: friends_path, class: !params[:has_number] && 'active' }
+      ALL
+    %a.btn.btn-default{ type: 'button', href: friends_path(has_number: 1), class: params[:has_number] && 'active' }
+      HAS NUMBER
+
 .friends
-  - @friends.each do |friend|
-    .friend
-      = image_tag friend.picture_url
-      .text
-        = friend.name
-        = friend.number
+  - @friends.each_slice(10) do |friends_chunk|
+    .row
+      - friends_chunk.each do |friend|
+        .friend.col-md-1{ id: "friend_#{friend.id}" }
+          .thumbnail
+            - if friend.number
+              .number.label.label-primary
+                = '%02d' % friend.number
+            = image_tag friend.picture_url, class: 'picture'
+            .caption
+              = link_to friend.name, friend_path(friend)

@@ -1,0 +1,52 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+.header {
+  margin: 20px;
+}
+
+.friends_management {
+  @include clearfix;
+
+  .btn-group {
+    float: right;
+
+    &.filter {
+      margin-right: 20px;
+    }
+  }
+}
+
+.friends {
+  margin-top: 20px;
+
+  .friend.col-md-1 {
+    text-align: center;
+    width: 10%;
+    padding: 0 5px;
+
+    .thumbnail {
+      position: relative;
+
+      .number {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+
+      .picture {
+        width: 100%;
+      }
+    }
+  }
+
+  .text {
+    min-height: 60px;
+  }
+}
+
+.friend_form {
+  .btn.btn-primary {
+    margin-top: 20px;
+  }
+}
