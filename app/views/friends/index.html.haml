@@ -1,0 +1,7 @@
+.friends
+  - @friends.each do |friend|
+    .friend
+      = image_tag friend.picture_url
+      .text
+        = friend.name
+        = friend.number

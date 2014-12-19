@@ -4,6 +4,9 @@ class Friend < ActiveRecord::Base
 
   before_validation :set_name_kana
 
+  scope :name_kana_order, -> { order('name_kana') }
+  scope :has_number, -> { where.not(number: nil) }
+
   def self.build_with_user(user, raw_friends)
     raw_friends.each do |raw_friend|
       record = self.new(
