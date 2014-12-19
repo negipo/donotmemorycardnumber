@@ -26,6 +26,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'devise'
 gem 'omniauth-facebook'
 gem 'dotenv-rails'
+gem 'koala'
 
 group :development do
   gem 'pry'
