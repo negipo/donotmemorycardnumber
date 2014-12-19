@@ -1,5 +1,7 @@
 class HomeController < ApplicationController
   def index
-    binding.pry if current_user
+    if current_user
+      rediret_to friends_path
+    end
   end
 end

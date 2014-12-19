@@ -27,6 +27,7 @@ gem 'devise'
 gem 'omniauth-facebook'
 gem 'dotenv-rails'
 gem 'koala'
+gem 'romaji'
 
 group :development do
   gem 'pry'
