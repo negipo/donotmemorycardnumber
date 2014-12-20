@@ -4,14 +4,18 @@ jQuery(($) ->
       @canvas = $('.friends_memory_canvas')
       @friends = json
       @firstState = true
+      @setSelectedFriends()
       @render()
+
+    setSelectedFriends: ->
+      @selectedFriends = []
+      for _ in [1..@friendShowCount()]
+        @selectedFriends.push(@friends[@randomIdx()])
+
     render: ->
       if @firstState
         @canvas.html('')
-        friends = []
-        for a in [1..@friendShowCount()]
-          friends.push(@friends[@randomIdx()])
-        @renderFriends(friends)
+        @renderFriends(@selectedFriends)
 
       friendElement = @canvas.find('.friend')
 
@@ -21,6 +25,7 @@ jQuery(($) ->
       else
         friendElement.find('.number').show()
         friendElement.find('.name').hide()
+
     renderFriends: (friends) ->
       count = friends.length
       base = @canvas.innerWidth() / count
@@ -56,21 +61,32 @@ jQuery(($) ->
         )
         # @canvas.css(paddingLeft: "#{(@canvas.width() - base * 2 * count) / 2}px")
         @canvas.append(friendHtml)
+
     switch: =>
       @firstState = !@firstState
+      if @firstState
+        @setSelectedFriends()
       @render()
+
     numberWithPadding: (num) ->
       "0#{num}".slice(-2)
 
     randomIdx: ->
       Math.floor(Math.random() * @friends.length)
+
     isNameShown: ->
       if $('.friends_memory_mode a.active').data('first') == 'name'
         @firstState
       else
         !@firstState
+
     friendShowCount: ->
       $('.friends_memory_mode .count .dropdown-toggle').data('count')
+
+    renderWithFirstState: ->
+      @firstState = true
+      @render()
+
     switchWithFirstState: ->
       @firstState = false
       @switch()
@@ -80,8 +96,11 @@ jQuery(($) ->
 
     $('.friends_memory_canvas').click(canvas.switch)
     $(document).keydown((e) ->
-      if e.keyCode == 74
-        canvas.switch()
+      switch e.keyCode
+        when 74
+        then canvas.switch()
+        when 75
+        then canvas.renderWithFirstState()
     )
 
     $('.friends_memory_mode .first a').click((e) ->

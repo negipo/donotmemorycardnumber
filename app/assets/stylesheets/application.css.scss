@@ -70,21 +70,17 @@
   @include clearfix;
   box-sizing: border-box;
   margin-top: 20px;
-  $base_size: 200px;
 
   .friend {
     float: left;
   }
 
   .image {
-    width: $base_size * 2;
-    height: $base_size * 2;
-    border-radius: $base_size;
+    border-radius: 200px;
   }
 
   .name {
     text-align: center;
-    font-size: $base_size / 5;
     font-weight: bold;
 
     .name_text {
@@ -93,8 +89,6 @@
   }
 
   .number {
-    font-size: $base_size;
     text-align: center;
-    margin-top: $base_size / 4;
   }
 }
