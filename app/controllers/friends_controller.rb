@@ -3,8 +3,10 @@ class FriendsController < ApplicationController
   before_action :load_friend, only: %i(show update assign_number withdraw_number)
 
   def index
-    if params[:has_number]
-      @friends = @friends.has_number
+    @friends = @friends.has_number if params[:has_number]
+    if params[:range]
+      first_number, last_number = params[:range].split('-').map(&:to_i)
+      @friends = @friends.where(number: (first_number..last_number).to_a)
     end
   end
 
@@ -38,6 +40,9 @@ class FriendsController < ApplicationController
     Friend.assign_numbers(current_user, friends_has_number)
 
     redirect_to friends_path(anchor: "friend_#{@friend.id}")
+  end
+
+  def memory
   end
 
   private

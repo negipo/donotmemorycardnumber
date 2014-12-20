@@ -1,0 +1,37 @@
+.page-header
+  %h1 MEMORY FRIENDS #{params[:range]}
+
+.friends_memory_mode
+  .btn-group.first{ role: 'group' }
+    %a.btn.btn-default.active{ type: 'button', href: '#', data: { first: 'number' } }
+      number first
+    %a.btn.btn-default{ type: 'button', href: '#', data: { first: 'name' } }
+      name first
+
+  .btn-group.count
+    .dropdown
+      %button.btn.btn-default.dropdown-toggle{"aria-expanded" => "true", "data-toggle" => "dropdown", type: "button", data: { count: 1 }}
+        count 1
+        %span.caret
+      %ul.dropdown-menu{"aria-labelledby" => "dropdownMenu1", role: "menu"}
+        %li{role: "presentation"}
+          %a{href: "#", role: "menuitem", tabindex: "-1", data: { count: 1 }} 1
+        %li{role: "presentation"}
+          %a{href: "#", role: "menuitem", tabindex: "-1", data: { count: 2 }} 2
+        %li{role: "presentation"}
+          %a{href: "#", role: "menuitem", tabindex: "-1", data: { count: 4 }} 4
+        %li{role: "presentation"}
+          %a{href: "#", role: "menuitem", tabindex: "-1", data: { count: 6 }} 6
+        %li{role: "presentation"}
+          %a{href: "#", role: "menuitem", tabindex: "-1", data: { count: 8 }} 8
+
+
+.friends_memory_canvas{ data: { path: friends_path(range: params[:range]) } }
+  -# - @friends.each do |friend|
+    .friend
+      .name
+        = image_tag friend.picture_url, class: 'image'
+        .name_text
+          = friend.name
+      .number= '%02d' % friend.number
+
