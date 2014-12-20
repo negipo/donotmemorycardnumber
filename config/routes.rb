@@ -3,6 +3,11 @@ Rails.application.routes.draw do
     collection do
       post :assign_numbers
     end
+
+    member do
+      put :assign_number
+      put :withdraw_number
+    end
   end
 
   devise_for :users,

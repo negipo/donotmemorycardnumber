@@ -1,3 +1,6 @@
+= content_for :js do
+  = javascript_include_tag 'assign_number'
+
 .page-header
   %h1 FRIENDS
 
@@ -12,6 +15,12 @@
     %a.btn.btn-default{ type: 'button', href: friends_path(has_number: 1), class: params[:has_number] && 'active' }
       HAS NUMBER
 
+- if @friends.select(&:number?).size != 100
+  .friend_assign_number_message
+    .alert.alert-danger{ role: 'alert' }
+      %span.glyphicon.glyphicon-exclamation-sign{ :'aria-hidden' => true }
+      You should assign numbers just 100 people
+
 .friends
   - @friends.each_slice(10) do |friends_chunk|
     .row
@@ -24,3 +33,10 @@
             = image_tag friend.picture_url, class: 'picture'
             .caption
               = link_to friend.name, friend_path(friend)
+              .buttons
+                = form_tag assign_number_friend_path(friend), method: :put do
+                  = link_to '#', class: 'btn btn-success btn-xs assign_button' do
+                    %span.glyphicon.glyphicon-ok-circle{ :'aria-hidden' => true }><
+                = form_tag withdraw_number_friend_path(friend), method: :put do
+                  = link_to '#', class: 'btn btn-danger btn-xs withdraw_button' do
+                    %span.glyphicon.glyphicon-remove-circle{ :'aria-hidden' => true }><

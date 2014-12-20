@@ -1,7 +1,6 @@
 class FriendsController < ApplicationController
-  SINGLE_ENTRY_ACTIONS = %i(show update)
-  before_action :load_friends, except: SINGLE_ENTRY_ACTIONS
-  before_action :load_friend, only: SINGLE_ENTRY_ACTIONS
+  before_action :load_friends
+  before_action :load_friend, only: %i(show update assign_number withdraw_number)
 
   def index
     if params[:has_number]
@@ -19,13 +18,26 @@ class FriendsController < ApplicationController
   end
 
   def assign_numbers
-    raise
     @friends.update_all(number: nil)
     @friends.sample(100).sort_by(&:name_kana).each_with_index do |friend, index|
       friend.update_attributes!(number: index)
     end
 
     redirect_to friends_path
+  end
+
+  def assign_number
+    friends_has_number = (@friends.has_number.all + [@friend]).uniq.sort_by(&:name_kana)
+    Friend.assign_numbers(current_user, friends_has_number)
+
+    redirect_to friends_path(anchor: "friend_#{@friend.id}")
+  end
+
+  def withdraw_number
+    friends_has_number = @friends.has_number.where.not(id: @friend.id).to_a
+    Friend.assign_numbers(current_user, friends_has_number)
+
+    redirect_to friends_path(anchor: "friend_#{@friend.id}")
   end
 
   private

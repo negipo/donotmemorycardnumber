@@ -20,6 +20,13 @@ class Friend < ActiveRecord::Base
     end
   end
 
+  def self.assign_numbers(user, friends)
+    user.friends.has_number.update_all(number: nil)
+    friends.sort_by(&:name_kana).each_with_index do |friend, index|
+      friend.update_attributes!(number: index)
+    end
+  end
+
   private
 
   def resolve_number_collision
