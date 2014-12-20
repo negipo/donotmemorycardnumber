@@ -11,7 +11,8 @@
   .btn-group.count
     .dropdown
       %button.btn.btn-default.dropdown-toggle{"aria-expanded" => "true", "data-toggle" => "dropdown", type: "button", data: { count: 1 }}
-        count 1
+        %span.text
+          count 1
         %span.caret
       %ul.dropdown-menu{"aria-labelledby" => "dropdownMenu1", role: "menu"}
         %li{role: "presentation"}
@@ -27,11 +28,3 @@
 
 
 .friends_memory_canvas{ data: { path: friends_path(range: params[:range]) } }
-  -# - @friends.each do |friend|
-    .friend
-      .name
-        = image_tag friend.picture_url, class: 'image'
-        .name_text
-          = friend.name
-      .number= '%02d' % friend.number
-

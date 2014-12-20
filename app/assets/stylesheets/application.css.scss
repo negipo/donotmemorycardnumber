@@ -67,11 +67,13 @@
 }
 
 .friends_memory_canvas {
+  @include clearfix;
+  box-sizing: border-box;
   margin-top: 20px;
   $base_size: 200px;
 
   .friend {
-    display: none;
+    float: left;
   }
 
   .image {
