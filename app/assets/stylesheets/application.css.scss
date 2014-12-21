@@ -69,7 +69,7 @@
 .friends_memory_canvas {
   @include clearfix;
   box-sizing: border-box;
-  margin-top: 20px;
+  margin: 20px 0 100px 0;
 
   .friend {
     float: left;
