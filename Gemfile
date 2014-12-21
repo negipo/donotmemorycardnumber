@@ -3,8 +3,6 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.8'
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
 # Use SCSS for stylesheets
 gem 'bootstrap-sass', '~> 3.3.1'
 gem 'autoprefixer-rails'
@@ -31,8 +29,13 @@ gem 'romaji'
 gem 'haml-rails'
 gem 'erb2haml'
 
-group :development do
+group :development, :test do
   gem 'pry'
   gem 'spring'
+  # Use sqlite3 as the database for Active Record
+  gem 'sqlite3'
 end
 
+group :production do
+  gem 'pg'
+end
