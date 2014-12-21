@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 20141219144125) do
     t.integer  "user_id"
     t.string   "name"
     t.string   "name_kana"
-    t.string   "number"
+    t.integer  "number"
     t.string   "picture_url"
     t.datetime "created_at"
     t.datetime "updated_at"

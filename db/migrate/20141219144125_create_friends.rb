@@ -4,7 +4,7 @@ class CreateFriends < ActiveRecord::Migration
       t.integer :user_id
       t.string :name
       t.string :name_kana
-      t.string :number
+      t.integer :number
       t.string :picture_url
 
       t.timestamps
