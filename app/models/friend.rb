@@ -28,7 +28,8 @@ class Friend < ActiveRecord::Base
 
   def self.assign_numbers(user, friends)
     user.friends.has_number.update_all(number: nil)
-    friends.sort_by(&:name_kana).each_with_index do |friend, index|
+    friends.sort_by(&:name_kana).each.with_index do |friend, index|
+      friend.reload
       friend.update_attributes!(number: index)
     end
   end
@@ -36,10 +37,10 @@ class Friend < ActiveRecord::Base
   private
 
   def resolve_number_collision
-    return unless number
+    return unless number?
+    return unless number_changed?
 
-    relation = self.user.friends.where(number: self.number)
-    relation.first.update_attributes!(number: nil) if relation.exists?
+    self.user.friends.where(number: number).update_all(number: nil)
   end
 
   def set_name_kana
