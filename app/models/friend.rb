@@ -6,7 +6,13 @@ class Friend < ActiveRecord::Base
   before_validation :set_name_kana
   before_validation :resolve_number_collision
 
-  scope :name_kana_order, -> { order('name_kana') }
+  # XXX
+  if Rails.env.production?
+    scope :name_kana_order, -> { order('name_kana COLLATE "C" ASC') }
+  else
+    scope :name_kana_order, -> { order('name_kana') }
+  end
+
   scope :has_number, -> { where.not(number: nil) }
 
   def self.build_with_user(user, raw_friends)
