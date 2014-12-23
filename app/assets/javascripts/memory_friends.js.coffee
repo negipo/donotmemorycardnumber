@@ -14,17 +14,7 @@ jQuery(($) ->
       for place in [1..@friendShowCount()]
         source = null
         switch @memorySource()
-          when 'all'
-            sources = null
-            switch place % 3
-              when 1
-                sources = @friends
-              when 2
-                sources = @objects
-              when 0
-                sources = @actions
-            source = sources[@randomIdx()]
-          when 'friends'
+          when 'all', 'friends'
             source = @friends[@randomIdx()]
           when 'objects'
             source = @objects[@randomIdx()]
@@ -69,6 +59,14 @@ jQuery(($) ->
               <div class='number'>#{@numberWithPadding(memory.number)}</div>
             </div>
           ")
+
+          # TODO: It's a bit mess
+          if @memorySource() == 'all'
+            object = $.grep(@objects, (object) => object.number == memory.number)[0]
+            action = $.grep(@actions, (action) => action.number == memory.number)[0]
+            memoryHtml.
+              find('.name').
+              append("<div class='additional'>#{object.name} #{action.name}</div>")
         else
           memoryHtml = $("
             <div class='memory'>
@@ -85,9 +83,11 @@ jQuery(($) ->
           width: "#{base}px"
           height: "#{base}px"
         ).end().find('.name_text').css(
-          fontSize: "#{base * 0.1 }px"
+          fontSize: "#{base * 0.1}px"
+        ).end().find('.additional').css(
+          fontSize: "#{base * 0.05}px"
         ).end().find('.name_text_huge').css(
-          fontSize: "#{base * 0.2 }px"
+          fontSize: "#{base * 0.2}px"
           marginTop: "#{base * 0.3}px"
         ).end().find('.number').css(
           fontSize: "#{base * 0.9}px"
