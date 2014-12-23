@@ -11,6 +11,11 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :memory do
+    resources :objects
+    resources :actions
+  end
+
   devise_for :users,
     controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
   root to: "home#index"

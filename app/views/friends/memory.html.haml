@@ -1,9 +1,19 @@
 .page-header
   %h1
-    MEMORY FRIENDS #{params[:range]}
+    MEMORY #{params[:range]}
     %span.small j,k to change number
 
 .friends_memory_mode
+  .btn-group.memory{ role: 'group' }
+    %a.btn.btn-default.active{ type: 'button', href: '#', data: { memory: 'all' } }
+      all
+    %a.btn.btn-default{ type: 'button', href: '#', data: { memory: 'friends' } }
+      friends
+    %a.btn.btn-default{ type: 'button', href: '#', data: { memory: 'objects' } }
+      objects
+    %a.btn.btn-default{ type: 'button', href: '#', data: { memory: 'actions' } }
+      actions
+
   .btn-group.first{ role: 'group' }
     %a.btn.btn-default.active{ type: 'button', href: '#', data: { first: 'number' } }
       number first
@@ -17,16 +27,10 @@
           count 1
         %span.caret
       %ul.dropdown-menu{"aria-labelledby" => "dropdownMenu1", role: "menu"}
-        %li{role: "presentation"}
-          %a{href: "#", role: "menuitem", tabindex: "-1", data: { count: 1 }} 1
-        %li{role: "presentation"}
-          %a{href: "#", role: "menuitem", tabindex: "-1", data: { count: 2 }} 2
-        %li{role: "presentation"}
-          %a{href: "#", role: "menuitem", tabindex: "-1", data: { count: 4 }} 4
-        %li{role: "presentation"}
-          %a{href: "#", role: "menuitem", tabindex: "-1", data: { count: 6 }} 6
-        %li{role: "presentation"}
-          %a{href: "#", role: "menuitem", tabindex: "-1", data: { count: 8 }} 8
+        - %w(1 3 6 8).each do |count|
+          %li{role: "presentation"}
+            %a{href: "#", role: "menuitem", tabindex: "-1", data: { count: count }} count #{count}
 
-
-.friends_memory_canvas{ data: { path: friends_path(range: params[:range]) } }
+.friends_memory_canvas{ data: { path: friends_path(range: params[:range]),
+objects_path: memory_objects_path(range: params[:range]),
+actions_path: memory_actions_path(range: params[:range]) } }

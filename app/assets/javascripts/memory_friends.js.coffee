@@ -1,33 +1,53 @@
 jQuery(($) ->
   class Canvas
-    constructor: (json)->
+    constructor: (friends, objects, actions)->
       @canvas = $('.friends_memory_canvas')
-      @friends = json
+      @friends = friends
+      @objects = objects
+      @actions = actions
       @firstState = true
-      @setSelectedFriends()
+      @setSelectedMemories()
       @render()
 
-    setSelectedFriends: ->
-      @selectedFriends = []
-      for _ in [1..@friendShowCount()]
-        @selectedFriends.push(@friends[@randomIdx()])
+    setSelectedMemories: ->
+      @selectedMemories = []
+      for place in [1..@friendShowCount()]
+        source = null
+        switch @memorySource()
+          when 'all'
+            sources = null
+            switch place % 3
+              when 1
+                sources = @friends
+              when 2
+                sources = @objects
+              when 0
+                sources = @actions
+            source = sources[@randomIdx()]
+          when 'friends'
+            source = @friends[@randomIdx()]
+          when 'objects'
+            source = @objects[@randomIdx()]
+          when 'actions'
+            source = @actions[@randomIdx()]
+        @selectedMemories.push(source)
 
     render: ->
       if @firstState
         @canvas.html('')
-        @renderFriends(@selectedFriends)
+        @renderMemories(@selectedMemories)
 
-      friendElement = @canvas.find('.friend')
+      memoryElement = @canvas.find('.memory')
 
       if @isNameShown()
-        friendElement.find('.name').show()
-        friendElement.find('.number').hide()
+        memoryElement.find('.name').show()
+        memoryElement.find('.number').hide()
       else
-        friendElement.find('.number').show()
-        friendElement.find('.name').hide()
+        memoryElement.find('.number').show()
+        memoryElement.find('.name').hide()
 
-    renderFriends: (friends) ->
-      count = friends.length
+    renderMemories: (memories) ->
+      count = memories.length
       base = @canvas.innerWidth() / count
       if base > 400
         base = 400
@@ -38,34 +58,48 @@ jQuery(($) ->
           paddingTop: "#{(400 - base) / 2}px"
         )
 
-      for friend in friends
-        friendHtml = $("
-          <div class='friend'>
-            <div class='name'>
-              <img src='#{friend.picture_url}' class='image' />
-              <div class='name_text'>#{friend.name}</div>
+      for memory in memories
+        if memory.picture_url
+          memoryHtml = $("
+            <div class='memory'>
+              <div class='name'>
+                <img src='#{memory.picture_url}' class='image' />
+                <div class='name_text'>#{memory.name}</div>
+              </div>
+              <div class='number'>#{@numberWithPadding(memory.number)}</div>
             </div>
-            <div class='number'>#{@numberWithPadding(friend.number)}</div>
-          </div>
-        ")
-        friendHtml.css(
+          ")
+        else
+          memoryHtml = $("
+            <div class='memory'>
+              <div class='name'>
+                &nbsp;
+                <div class='name_text_huge'>#{memory.name}</div>
+              </div>
+              <div class='number'>#{@numberWithPadding(memory.number)}</div>
+            </div>
+          ")
+        memoryHtml.css(
           width: "#{base}px"
         ).find('.image').css(
           width: "#{base}px"
           height: "#{base}px"
-        ).end().find('.name').css(
+        ).end().find('.name_text').css(
           fontSize: "#{base * 0.1 }px"
+        ).end().find('.name_text_huge').css(
+          fontSize: "#{base * 0.2 }px"
+          marginTop: "#{base * 0.3}px"
         ).end().find('.number').css(
           fontSize: "#{base * 0.9}px"
           marginTop: "-#{base * 0.15}px"
         )
         # @canvas.css(paddingLeft: "#{(@canvas.width() - base * 2 * count) / 2}px")
-        @canvas.append(friendHtml)
+        @canvas.append(memoryHtml)
 
     switch: =>
       @firstState = !@firstState
       if @firstState
-        @setSelectedFriends()
+        @setSelectedMemories()
       @render()
 
     numberWithPadding: (num) ->
@@ -75,10 +109,13 @@ jQuery(($) ->
       Math.floor(Math.random() * @friends.length)
 
     isNameShown: ->
-      if $('.friends_memory_mode a.active').data('first') == 'name'
+      if $('.friends_memory_mode .first a.active').data('first') == 'name'
         @firstState
       else
         !@firstState
+
+    memorySource: ->
+      $('.friends_memory_mode .memory a.active').data('memory')
 
     friendShowCount: ->
       $('.friends_memory_mode .count .dropdown-toggle').data('count')
@@ -91,8 +128,31 @@ jQuery(($) ->
       @firstState = false
       @switch()
 
-  $.getJSON($('.friends_memory_canvas').data('path'), (data) ->
-    canvas = new Canvas(data)
+  callApi = (path) ->
+    deferred = Promise.defer()
+
+    $.getJSON(path, (data) ->
+      deferred.resolve(data)
+    )
+
+    deferred.promise
+
+  friends = null
+  objects = null
+  actions = null
+
+  p1 = callApi($('.friends_memory_canvas').data('path')).then((data)->
+    friends = data
+  )
+  p2 = callApi($('.friends_memory_canvas').data('objects-path')).then((data)->
+    objects = data
+  )
+  p3 = callApi($('.friends_memory_canvas').data('actions-path')).then((data)->
+    actions = data
+  )
+
+  Promise.all([p1, p2, p3]).then(->
+    canvas = new Canvas(friends, objects, actions)
 
     $('.friends_memory_canvas').click(canvas.switch)
     $(document).keydown((e) ->
@@ -101,6 +161,18 @@ jQuery(($) ->
         then canvas.switch()
         when 75
         then canvas.renderWithFirstState()
+    )
+
+    $('.friends_memory_mode .memory a').click((e) ->
+      e.preventDefault()
+      self = this
+      $(this).closest('.btn-group').find('a').each((idx, a) ->
+        if a == self
+          $(a).addClass('active')
+        else
+          $(a).removeClass('active')
+      )
+      canvas.switchWithFirstState()
     )
 
     $('.friends_memory_mode .first a').click((e) ->
