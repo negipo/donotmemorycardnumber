@@ -18,6 +18,10 @@
             %ul.nav.navbar-nav
               %li{ class: controller_name == 'friends' && 'active' }
                 = link_to 'friends', friends_path
+              %li{ class: controller_name == 'objects' && 'active' }
+                = link_to 'objects', memory_objects_path
+              %li{ class: controller_name == 'actions' && 'active' }
+                = link_to 'actions', memory_actions_path
               %li.dropdown
                 %a.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", href: "#", role: "button"}
                   memory

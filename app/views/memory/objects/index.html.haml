@@ -1,0 +1,16 @@
+.page-header
+  %h1 objects
+
+<div class="panel panel-default">
+
+.panel.panel-default
+  %table.table
+    %tr
+      %th
+        = '#'
+      %th
+        name
+    - @objects.each do |object|
+      %tr
+        %td= object.number
+        %td= object.name
