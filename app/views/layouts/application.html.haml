@@ -16,13 +16,11 @@
           / Collect the nav links, forms, and other content for toggling
           .collapse.navbar-collapse
             %ul.nav.navbar-nav
-              %li{ class: controller_name == 'friends' && 'active' }
+              %li{ class: controller_name == 'friends' && action_name == 'index' && 'active' }
                 = link_to 'friends', friends_path
-              %li{ class: controller_name == 'objects' && 'active' }
-                = link_to 'objects', memory_objects_path
-              %li{ class: controller_name == 'actions' && 'active' }
-                = link_to 'actions', memory_actions_path
-              %li.dropdown
+              %li{ class: controller_name == 'memories' && 'active' }
+                = link_to 'memories', memories_path
+              %li.dropdown{ class: controller_name == 'friends' && action_name == 'memory' && 'active' }
                 %a.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", href: "#", role: "button"}
                   memory
                   %span.caret

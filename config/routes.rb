@@ -11,6 +11,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :memories
+
   namespace :memory do
     resources :objects
     resources :actions

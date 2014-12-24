@@ -1,0 +1,20 @@
+.page-header
+  %h1 memories
+
+.panel.panel-default
+  %table.table
+    %tr
+      %th
+        = '#'
+      %th
+        friend
+      %th
+        object
+      %th
+        action
+    - 1.upto(99) do |number|
+      %tr
+        %td= number
+        %td= @friends.find {|f| f.number == number }.try(:name)
+        %td= Memory::Object.at(number).name
+        %td= Memory::Action.at(number).name
