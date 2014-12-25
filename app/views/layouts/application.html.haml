@@ -20,38 +20,7 @@
                 = link_to 'friends', friends_path
               %li{ class: controller_name == 'memories' && 'active' }
                 = link_to 'memories', memories_path
-              %li.dropdown{ class: controller_name == 'friends' && action_name == 'memory' && 'active' }
-                %a.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", href: "#", role: "button"}
-                  memory
-                  %span.caret
-                %ul.dropdown-menu{role: "menu"}
-                  %li
-                    = link_to '0-9', memory_friends_path(range: '0-9')
-                  %li
-                    = link_to '10-19', memory_friends_path(range: '10-19')
-                  %li
-                    = link_to '20-29', memory_friends_path(range: '20-29')
-                  %li
-                    = link_to '30-39', memory_friends_path(range: '30-39')
-                  %li
-                    = link_to '40-49', memory_friends_path(range: '40-49')
-                  %li
-                    = link_to '50-59', memory_friends_path(range: '50-59')
-                  %li
-                    = link_to '60-69', memory_friends_path(range: '60-69')
-                  %li
-                    = link_to '70-79', memory_friends_path(range: '70-79')
-                  %li
-                    = link_to '80-89', memory_friends_path(range: '80-89')
-                  %li
-                    = link_to '90-99', memory_friends_path(range: '90-99')
-                  %li.divider
-                  %li
-                    = link_to '0-49', memory_friends_path(range: '0-49')
-                  %li
-                    = link_to '50-99', memory_friends_path(range: '50-99')
-                  %li.divider
-                  %li
-                    = link_to 'all', memory_friends_path(range: '0-99')
+              %li{ class: controller_name == 'friends' && action_name == 'memory' && 'active' }
+                = link_to 'memory', memory_friends_path
 
       = yield

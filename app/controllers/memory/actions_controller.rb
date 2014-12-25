@@ -1,8 +1,10 @@
 class Memory::ActionsController < ApplicationController
+  include DurationParamsBuildable
+  helper_method :first_param, :last_param
+
   def index
-    if params[:range]
-      first_number, last_number = params[:range].split('-').map(&:to_i)
-      @actions = Memory::Action.at(first_number..last_number)
+    if params[:first] && params[:last]
+      @actions = Memory::Action.at(first_param..last_param)
     else
       @actions = Memory::Action.all
     end

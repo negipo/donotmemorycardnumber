@@ -123,7 +123,7 @@ jQuery(($) ->
       Math.floor(Math.random() * @friends.length)
 
     isNameShown: ->
-      if $('.friends_memory_mode .first a.active').data('first') == 'name'
+      if $('.friends_memory_mode .start a.active').data('start') == 'name'
         @firstState
       else
         !@firstState
@@ -193,7 +193,7 @@ jQuery(($) ->
       counter.reset()
     )
 
-    $('.friends_memory_mode .first a').click((e) ->
+    $('.friends_memory_mode .start a').click((e) ->
       e.preventDefault()
       $(this).closest('.btn-group').find('a').toggleClass('active')
       canvas.switchWithFirstState()

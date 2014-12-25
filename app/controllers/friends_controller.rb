@@ -1,12 +1,13 @@
 class FriendsController < ApplicationController
+  include DurationParamsBuildable
   before_action :load_friends
   before_action :load_friend, only: %i(show update assign_number withdraw_number)
+  helper_method :first_param, :last_param
 
   def index
     @friends = @friends.has_number if params[:has_number]
-    if params[:range]
-      first_number, last_number = params[:range].split('-').map(&:to_i)
-      @friends = @friends.where(number: (first_number..last_number).to_a)
+    if params[:first] && params[:last]
+      @friends = @friends.where(number: (first_param..last_param).to_a)
     end
   end
 

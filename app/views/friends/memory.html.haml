@@ -4,6 +4,28 @@
     %span.small j,k to change number
 
 .friends_memory_mode
+  .btn-group.first
+    .dropdown
+      %button.btn.btn-default.dropdown-toggle{"aria-expanded" => "true", "data-toggle" => "dropdown", type: "button"}
+        %span.text
+          first #{first_param}
+        %span.caret
+      %ul.dropdown-menu{"aria-labelledby" => "dropdownMenu1", role: "menu"}
+        - %w(0 10 20 30 40 50 60 70 80 90).each do |first|
+          %li{ role: "presentation" }
+            = link_to "first #{first}", memory_friends_path(first: first, last: last_param), role: 'menuitem', tabindex: '-1'
+
+  .btn-group.last
+    .dropdown
+      %button.btn.btn-default.dropdown-toggle{"aria-expanded" => "true", "data-toggle" => "dropdown", type: "button"}
+        %span.text
+          last #{last_param}
+        %span.caret
+      %ul.dropdown-menu{"aria-labelledby" => "dropdownMenu1", role: "menu"}
+        - %w(9 19 29 39 49 59 69 79 89 99).each do |last|
+          %li{ role: "presentation" }
+            = link_to "last #{last}", memory_friends_path(first: first_param, last: last), role: 'menuitem', tabindex: '-1'
+
   .btn-group.memory{ role: 'group' }
     %a.btn.btn-default.active{ type: 'button', href: '#', data: { memory: 'all' } }
       all
@@ -14,11 +36,11 @@
     %a.btn.btn-default{ type: 'button', href: '#', data: { memory: 'actions' } }
       actions
 
-  .btn-group.first{ role: 'group' }
-    %a.btn.btn-default.active{ type: 'button', href: '#', data: { first: 'name' } }
-      name first
-    %a.btn.btn-default{ type: 'button', href: '#', data: { first: 'number' } }
-      number first
+  .btn-group.start{ role: 'group' }
+    %a.btn.btn-default.active{ type: 'button', href: '#', data: { start: 'name' } }
+      name start
+    %a.btn.btn-default{ type: 'button', href: '#', data: { start: 'number' } }
+      number start
 
   .btn-group.count
     .dropdown
@@ -33,6 +55,6 @@
 
 .counter
 
-.friends_memory_canvas{ data: { path: friends_path(range: params[:range]),
-objects_path: memory_objects_path(range: params[:range]),
-actions_path: memory_actions_path(range: params[:range]) } }
+.friends_memory_canvas{ data: { path: friends_path(first: first_param, last: last_param),
+objects_path: memory_objects_path(first: first_param, last: last_param),
+actions_path: memory_actions_path(first: first_param, last: last_param) } }
