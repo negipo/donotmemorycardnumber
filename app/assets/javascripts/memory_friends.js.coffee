@@ -1,10 +1,23 @@
 jQuery(($) ->
+  class Counter
+    constructor: (callback) ->
+      @count = 1
+      @callback = callback
+      @callback(@count)
+    reset: ->
+      @count = 1
+      @callback(@count)
+    add: ->
+      @count += 1
+      @callback(@count)
+
   class Canvas
-    constructor: (friends, objects, actions)->
+    constructor: (friends, objects, actions, counter)->
       @canvas = $('.friends_memory_canvas')
       @friends = friends
       @objects = objects
       @actions = actions
+      @counter = counter
       @firstState = true
       @setSelectedMemories()
       @render()
@@ -99,6 +112,7 @@ jQuery(($) ->
     switch: =>
       @firstState = !@firstState
       if @firstState
+        @counter.add()
         @setSelectedMemories()
       @render()
 
@@ -152,7 +166,10 @@ jQuery(($) ->
   )
 
   Promise.all([p1, p2, p3]).then(->
-    canvas = new Canvas(friends, objects, actions)
+    counter = new Counter((count)->
+      $('.counter').text(count)
+    )
+    canvas = new Canvas(friends, objects, actions, counter)
 
     $('.friends_memory_canvas').click(canvas.switch)
     $(document).keydown((e) ->
@@ -173,12 +190,14 @@ jQuery(($) ->
           $(a).removeClass('active')
       )
       canvas.switchWithFirstState()
+      counter.reset()
     )
 
     $('.friends_memory_mode .first a').click((e) ->
       e.preventDefault()
       $(this).closest('.btn-group').find('a').toggleClass('active')
       canvas.switchWithFirstState()
+      counter.reset()
     )
 
     $('.friends_memory_mode .count .dropdown-menu a').click((e) ->
@@ -187,6 +206,7 @@ jQuery(($) ->
         data('count', $(this).data('count')).
         find('.text').text("count #{$(this).data('count')}")
       canvas.switchWithFirstState()
+      counter.reset()
     )
   )
 )
