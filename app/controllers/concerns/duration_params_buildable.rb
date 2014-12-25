@@ -4,6 +4,12 @@ module DurationParamsBuildable
   end
 
   def last_param
-    params[:last].try(&:to_i) || 9
+    return @last_param if @last_param
+
+    @last_param = params[:last].try(&:to_i) || 9
+    if @last_param <= first_param
+      @last_param = first_param + 9
+    end
+    @last_param
   end
 end
